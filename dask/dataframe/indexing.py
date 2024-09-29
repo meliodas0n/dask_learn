@@ -69,6 +69,11 @@ class _iLocIndexer(_IndexerBase):
             # if there are any duplicate column names, do an iloc
             return self._iloc(iindexer, cindexer)
         else:
+            # check if column index passed is a column name
+            if isinstance(cindexer, str):
+                col_names = list(self.obj.columns)
+                cindexer = col_names.index(cindexer)
+                return self._iloc(iindexer, cindexer)
             # otherwise dispatch to dask.dataframe.core.DataFrame.__getitem__
             col_names = self.obj.columns[cindexer]
             return self.obj.__getitem__(col_names)
